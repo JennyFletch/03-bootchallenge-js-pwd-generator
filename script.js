@@ -3,6 +3,7 @@ var generateBtn = document.querySelector("#generate");
 
 function getCharCriteria() {
   
+  // Get password criteria and return it as an array
   var charLC = confirm("Would you like to include lowercase letters?");
   var charUP = confirm("Would you like to include uppercase letters?");
   var charNum = confirm("Would you like to include numbers?");
@@ -12,10 +13,13 @@ function getCharCriteria() {
 }
 
 function generatePassword() {
-  // initiate variables
+
+  // Initiate variables
   var pwdLength = 0; 
-  var generatedPWD = '';
+  var generatedPWD = "";
   var charTypes = [];
+  var charLetters = "abcdefghijklmnopqrstuvwxyz";
+  var charSpecials = "!@#$%^&*";
 
   // Collect password length from the user
   // Require a number between 8 and 128
@@ -26,20 +30,70 @@ function generatePassword() {
 
   // Collect character criteria from the user
   // Options: lowercase, uppercase, numerals and special characters
- charTypes = getCharCriteria();
- console.log(charTypes);
+  // Require at least one type of character
+  charTypes = getCharCriteria();
     
-  if(!charTypes[0] && !charTypes[1] && !charTypes[2] && !charTypes[3]) {
+  while (!charTypes[0] && !charTypes[1] && !charTypes[2] && !charTypes[3]) {
     alert("At least one type of character must be selected. Please try again.");
     charTypes = getCharCriteria();
   }
+
+  // Load an array with character types to include in password
+  var activeChars = [];
+  if(charTypes[0]) { activeChars.push("charLC"); }
+  if(charTypes[1]) { activeChars.push("charUP"); }
+  if(charTypes[2]) { activeChars.push("charNum"); }
+  if(charTypes[3]) { activeChars.push("charSpecial"); }
+
+
+  // Build the password one character at a time according to user criteria
+  // Randomize using only character types requested assigned length
+
+  // Initiate variables
+  var counter = 0;
+  var newChar = "";
+  var randomSelect = 0;
+  var randomSpot = 0;
   
+  for (var i=0; i < pwdLength; i++) {
 
-  for(var i=0; i < pwdLength; i++) {
-    var newChar = '';
+    // Select a random category
+    randomSelect = Math.floor(Math.random() * activeChars.length);
 
-    var charType = Math.floor(Math.random() * 5);
-    if (charNum) { newChar = Math.floor(Math.random() * 10); }
+    // Add a random character from the selected category to the end of the password
+    switch(activeChars[randomSelect]) {
+
+      case "charLC":
+        randomSpot = Math.floor(Math.random() * charLetters.length);
+        newChar = charLetters.charAt(randomSpot);
+        charLCused = true;
+        break;
+
+      case "charUP":
+        randomSpot = Math.floor(Math.random() * charLetters.length);
+        newChar = charLetters.charAt(randomSpot);
+        newChar = newChar.toUpperCase();
+        charUPused = true;
+        break;
+
+      case "charNum":
+        newChar = Math.floor(Math.random() * 10);
+        charNumused = true;
+        break;
+
+      case "charSpecial":
+        randomSpot = Math.floor(Math.random() * charSpecials.length);
+        newChar = charSpecials.charAt(randomSpot);
+        charSpecialused = true;
+        break;
+
+      default:
+        // should never get called
+        console.log("Error in category selection.");
+        break;
+    }
+
+    // Add the new character to the end of the password string
     generatedPWD += newChar;
   }
 
