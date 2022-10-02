@@ -3,17 +3,26 @@ var generateBtn = document.querySelector("#generate");
 
 function generatePassword() {
   // initiate variables
-  var pwdLength = 0; // between 8 and 128
-  const charTypes = []; // array - lower, upper, numeric, special
+  var pwdLength = 0; 
+  var charLC = false;
+  var charUP = false;
+  var charNum = false;
+  var charSpecial = false;
 
-  var pwdLength = prompt("How many characters should it be? (between 8 and 128)");
-  // console.log(Number(pwdLength));
+  // Collect password length from the user
+  // Require a number between 8 and 128
+  do {
+    var pwdLength = prompt("Password Length: please select a number between 8 and 128.");
+  } while (!Number(pwdLength) || Number(pwdLength) < 8 || Number(pwdLength) > 128);
 
-  if(Number(pwdLength)) {
-    console.log("That's a number.");
-  } else {
-    console.log("nope.");
-  }
+
+  // Collect character criteria from the user
+  // Options: lowercase, uppercase, numerals and special characters
+  var charLC = confirm("Would you like to include lowercase letters?");
+  var charUP = confirm("Would you like to include uppercase letters?");
+  var charNum = confirm("Would you like to include numerals?");
+  var charSpecial = confirm("Would you like to include special characters?");
+  
 
   
 }
